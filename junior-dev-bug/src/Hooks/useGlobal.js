@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import countryCode from "../Features/Checkout/Data/countryCode.json";
+
 const useGlobal = () => {
   const [open, setOpen] = useState(false);
   const [mbCode, setMbCode] = useState(countryCode[15]);
@@ -8,9 +9,17 @@ const useGlobal = () => {
 
   const toggleModal = () => setOpen(!open);
 
-  const getPayment = (body) => {
-    axios.post(`${process.env.REACT_APP_SERVER_URL}/api/bkash`, { ...body, totalPrice });
-  }
+  const getPayment = async (body) => {
+    try {
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/bkash`, {
+        ...body,
+        totalPrice,
+      });
+    } catch (error) {
+      console.error("GG", error);
+    }
+  };
+
   return {
     toggleModal,
     open,
@@ -21,4 +30,5 @@ const useGlobal = () => {
     setTotalPrice,
   };
 };
+
 export default useGlobal;
